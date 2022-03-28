@@ -1,6 +1,5 @@
 # INM705
-Object detection by instance segmentation for MS COCO dataset
-Focus on person detection
+Object detection by instance segmentation for MS COCO dataset - Focus on person detection
 
 The code was prepared for server that does not have direct access to Internet
 
