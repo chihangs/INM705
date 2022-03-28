@@ -1,2 +1,2 @@
 # INM705
-Object detection
+Object detection by instance segmentation
