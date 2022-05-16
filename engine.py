@@ -14,7 +14,7 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq, sc
     metric_logger = utils.MetricLogger(delimiter="  ")
     metric_logger.add_meter("lr", utils.SmoothedValue(window_size=1, fmt="{value:.6f}"))
     header = f"Epoch: [{epoch}]"
-
+    
     lr_scheduler = None
     if epoch == 0:
         warmup_factor = 1.0 / 1000
@@ -23,8 +23,11 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq, sc
         lr_scheduler = torch.optim.lr_scheduler.LinearLR(
             optimizer, start_factor=warmup_factor, total_iters=warmup_iters
         )
-
+    
+    ls = []
+   
     for images, targets in metric_logger.log_every(data_loader, print_freq, header):
+        
         images = list(image.to(device) for image in images)
         targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
         with torch.cuda.amp.autocast(enabled=scaler is not None):
@@ -36,7 +39,8 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq, sc
         losses_reduced = sum(loss for loss in loss_dict_reduced.values())
 
         loss_value = losses_reduced.item()
-
+        
+        ls.append(loss_value)
         if not math.isfinite(loss_value):
             print(f"Loss is {loss_value}, stopping training")
             print(loss_dict_reduced)
@@ -57,7 +61,7 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq, sc
         metric_logger.update(loss=losses_reduced, **loss_dict_reduced)
         metric_logger.update(lr=optimizer.param_groups[0]["lr"])
 
-    return metric_logger
+    return metric_logger , ls
 
 
 def _get_iou_types(model):
