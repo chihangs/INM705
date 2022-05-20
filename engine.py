@@ -10,6 +10,8 @@ from coco_utils import get_coco_api_from_dataset
 
 
 def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq, scaler=None):
+    #modified to output ls and avg_loss
+    
     model.train()
     metric_logger = utils.MetricLogger(delimiter="  ")
     metric_logger.add_meter("lr", utils.SmoothedValue(window_size=1, fmt="{value:.6f}"))
@@ -60,8 +62,10 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq, sc
 
         metric_logger.update(loss=losses_reduced, **loss_dict_reduced)
         metric_logger.update(lr=optimizer.param_groups[0]["lr"])
+        
+        avg_loss = sum(ls)/len(ls)
 
-    return metric_logger , ls
+    return metric_logger , ls, avg_loss
 
 
 def _get_iou_types(model):
