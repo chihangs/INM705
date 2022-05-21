@@ -8,3 +8,6 @@ Need to download weight files below manually (too big to upload to github, which
 fasterrcnn_resnet50_fpn_coco-258fb6c6.pth
 
 maskrcnn_resnet50_fpn_coco-bf2d0c1e.pth
+
+Because of the server environment, we also pre-download engine.py, utlis.py, transform.py (and they depend on coco_eval.py, coco_utlis.py, so they also need downloading) from https://github.com/pytorch/vision.git.![image](https://user-images.githubusercontent.com/18546385/169626335-921b7339-5ed4-430b-a5cf-385384c9b4d6.png)
+
